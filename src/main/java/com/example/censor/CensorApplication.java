@@ -70,10 +70,10 @@ public class CensorApplication {
             System.out.println("========================================");
             System.out.println();
 
-            // 服务完全就绪后，自动打开浏览器【带上区分标记】
+            // 服务完全就绪后，自动打开浏览器
             try {
                 if (Desktop.isDesktopSupported()) {
-                    Desktop.getDesktop().browse(new URI("http://localhost:" + SERVER_PORT + "?autoLaunch=1"));
+                    Desktop.getDesktop().browse(new URI("http://localhost:" + SERVER_PORT));
                 }
             } catch (Exception ignored) {
                 // 浏览器打开失败不影响服务运行，静默忽略

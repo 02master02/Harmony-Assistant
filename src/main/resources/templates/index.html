@@ -472,14 +472,7 @@
 </div>
 
 <script>
-const autoLaunchFlag = location.search.includes('autoLaunch=1');
-
-// 页面关闭兜底监听
-window.addEventListener('pagehide', function(e) {
-    if (autoLaunchFlag && !e.persisted) {
-        navigator.sendBeacon('/sys/shutdown');
-    }
-});
+// 自动关闭逻辑已禁用，只保留手动退出
 
 // 右上角退出按钮逻辑
 const closeBtn = document.getElementById('closeAppBtn');
