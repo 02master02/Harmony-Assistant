@@ -1,3 +1,4 @@
+com\example\censor\ShutdownController.class
 com\example\censor\controller\CensorController.class
 com\example\censor\service\CensorService.class
 com\example\censor\CensorApplication.class

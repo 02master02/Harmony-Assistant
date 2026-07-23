@@ -15,7 +15,7 @@
     <artifactId>dirty-words-censor</artifactId>
     <version>1.0.0</version>
     <name>dirty-words-censor</name>
-    <description>脏话自动和谐网页应用</description>
+    <description>谐网助手页应用</description>
 
     <properties>
         <java.version>17</java.version>
@@ -40,9 +40,51 @@
 
     <build>
         <plugins>
+            <!-- SpringBoot 原生打包插件（必须保留，用于生成可执行jar） -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- 新增：Launch4j 打包exe插件 -->
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>2.5.1</version>
+                <executions>
+                    <execution>
+                        <id>build-exe</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <!-- exe输出路径：打包后在target目录生成 -->
+                            <outputFile>${project.build.directory}/${project.artifactId}.exe</outputFile>
+                            <!-- 绑定SpringBoot生成的可执行jar -->
+                            <jar>${project.build.directory}/${project.build.finalName}.jar</jar>
+                            <!-- 软件基础信息 -->
+                            <productName>和谐工具</productName>
+                            <fileDescription>和谐助手网页工具</fileDescription>
+                            <copyright>Free Open Source</copyright>
+                            <!-- gui=无黑窗口静默启动；console=保留控制台日志（调试用） -->
+                            <headerType>gui</headerType>
+                            <dontWrapJar>false</dontWrapJar>
+
+                            <!-- JRE运行环境配置 -->
+                            <jre>
+                                <minVersion>17</minVersion>
+                                <!-- 优先读取exe同目录的jre文件夹（内置运行环境） -->
+                                <path>jre</path>
+                                <jdkPreference>preferJre</jdkPreference>
+                            </jre>
+
+                            <!-- 可选：自定义软件图标（放入src/main/resources/icon.ico）
+                            <icon>src/main/resources/icon.ico</icon>
+                            -->
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -15,6 +15,8 @@
             --accent: #1faa6a;
             --accent-deep: #168a55;
             --warm: #f4a261;
+            --danger: #e04848;
+            --danger-deep: #c83c3c;
             --panel: rgba(255, 255, 255, 0.88);
             --line: #cfe5d8;
             --result: #e6f7ee;
@@ -39,6 +41,38 @@
             width: min(720px, 100%);
             margin: 0 auto;
             padding: 40px 18px 56px;
+            position: relative;
+        }
+
+        /* 右上角退出按钮容器 */
+        .top-exit-wrap {
+            position: absolute;
+            top: 36px;
+            right: 18px;
+        }
+
+        .exit-feedback {
+            position: absolute;
+            top: calc(50% + 5mm);
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(20, 36, 30, 0.92);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            box-shadow: 0 10px 24px rgba(20, 36, 30, 0.24);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.18s ease, transform 0.18s ease;
+            z-index: 2;
+            white-space: nowrap;
+        }
+
+        .exit-feedback.show {
+            opacity: 1;
+            transform: translate(-50%, -50%);
         }
 
         .brand {
@@ -96,7 +130,6 @@
             border: 1px solid var(--line);
             border-radius: 18px;
             padding: 26px 24px 24px;
-            box-shadow: var(--shadow);
             animation: rise 0.75s ease 0.26s both;
         }
 
@@ -165,23 +198,142 @@
             appearance: none;
             border: none;
             cursor: pointer;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
-            color: #fff;
             font: inherit;
-            font-size: 1.02rem;
             font-weight: 700;
-            padding: 12px 28px;
             border-radius: 999px;
-            box-shadow: 0 8px 20px rgba(31, 170, 106, 0.28);
             transition: transform 0.12s ease, box-shadow 0.18s ease, filter 0.18s ease;
         }
 
-        button:hover {
+        .btn-harmony {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+            color: #fff;
+            font-size: 1.02rem;
+            padding: 12px 28px;
+            box-shadow: 0 8px 20px rgba(31, 170, 106, 0.28);
+        }
+
+        .btn-harmony:hover {
             filter: brightness(1.05);
             box-shadow: 0 10px 24px rgba(31, 170, 106, 0.34);
         }
 
+        /* ===== 退出按钮样式，和和谐按钮动效完全统一 ===== */
+        .btn-shutdown {
+            background: linear-gradient(135deg, var(--danger) 0%, var(--danger-deep) 100%);
+            position: relative;   /* 新增 */
+            z-index: 3;        /* 新增，比 .exit-feedback 的 z-index: 2 高 */
+            color: #fff;
+            font-size: 0.9rem;
+            padding: 12px 22px;
+            box-shadow: 0 6px 16px rgba(224, 72, 72, 0.25);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.2;
+            min-height: 44px;
+        }
+
+        .btn-shutdown:hover {
+            filter: brightness(1.05);
+            box-shadow: 0 10px 24px rgba(224, 72, 72, 0.32);
+        }
+
+        .btn-shutdown,
+        .btn-shutdown:hover,
+        .btn-shutdown:focus-visible {
+            cursor: pointer;
+        }
+
+        .btn-shutdown--active {
+            animation: shutdownBurst 0.45s ease both;
+        }
+
+        @keyframes shutdownBurst {
+            0% { transform: scale(1); filter: brightness(1); }
+            40% { transform: scale(0.96); }
+            70% { transform: scale(1.04); filter: brightness(1.08); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+
         button:active { transform: scale(0.98); }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 36, 30, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1200;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-card {
+            width: min(360px, 100%);
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: 0 18px 40px rgba(20, 36, 30, 0.16);
+            padding: 22px 20px 20px;
+            animation: pop 0.28s ease both;
+        }
+
+        .modal-title {
+            margin: 0 0 8px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .modal-message {
+            margin: 0 0 16px;
+            color: var(--muted);
+            line-height: 1.65;
+            font-size: 0.95rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-cancel,
+        .btn-confirm {
+            padding: 10px 16px;
+            min-width: 92px;
+        }
+
+        .btn-cancel {
+            background: #f3f7f4;
+            color: var(--ink);
+        }
+
+        .btn-confirm {
+            background: linear-gradient(135deg, var(--danger) 0%, var(--danger-deep) 100%);
+            color: #fff;
+        }
+
+        .btn-cancel:hover,
+        .btn-confirm:hover {
+            filter: brightness(1.03);
+        }
+
+        .exit-done {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--ink);
+            background: linear-gradient(180deg, #f5faf7 0%, var(--bg) 100%);
+            padding: 24px;
+        }
 
         .result {
             margin-top: 22px;
@@ -247,14 +399,25 @@
 
         @media (max-width: 520px) {
             .page { padding-top: 28px; }
+            .top-exit-wrap {
+                position: relative;
+                text-align: right;
+                margin-bottom:16px;
+            }
             .actions { flex-direction: column; align-items: stretch; }
-            button { width: 100%; }
+            .btn-harmony { width: 100%; }
             .nudge { text-align: center; order: 1; }
         }
     </style>
 </head>
 <body>
 <main class="page">
+    <!-- 右上角退出按钮 -->
+    <div class="top-exit-wrap">
+        <div class="exit-feedback" id="exitFeedback">正在处理退出…</div>
+        <button type="button" class="btn-shutdown" id="closeAppBtn">退出程序</button>
+    </div>
+
     <h1 class="brand">脏话自动和谐</h1>
     <p class="hook">还在为一肚子骂人的话打出来却发不出去吗？</p>
     <p class="lead">
@@ -279,7 +442,7 @@
                       th:text="${original}"></textarea>
             <div class="actions">
                 <span class="nudge">别憋着了，先和谐，再发送。</span>
-                <button type="submit">和谐一下</button>
+                <button type="submit" class="btn-harmony">和谐一下</button>
             </div>
         </form>
 
@@ -296,5 +459,151 @@
 
     <p class="footer">情绪到位，敏感词退场 · 仅供学习娱乐，请理性表达</p>
 </main>
+
+<div class="modal-overlay" id="exitModal" role="dialog" aria-modal="true" aria-labelledby="exitModalTitle">
+    <div class="modal-card">
+        <h3 class="modal-title" id="exitModalTitle">确认退出</h3>
+        <p class="modal-message" id="exitModalMessage">是否确定退出和谐程序？确认后会先停止后端服务，再关闭当前页面。</p>
+        <div class="modal-actions">
+            <button type="button" class="btn-cancel" id="exitCancelBtn">取消</button>
+            <button type="button" class="btn-confirm" id="exitConfirmBtn">确认退出</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const autoLaunchFlag = location.search.includes('autoLaunch=1');
+
+// 页面关闭兜底监听
+window.addEventListener('pagehide', function(e) {
+    if (autoLaunchFlag && !e.persisted) {
+        navigator.sendBeacon('/sys/shutdown');
+    }
+});
+
+// 右上角退出按钮逻辑
+const closeBtn = document.getElementById('closeAppBtn');
+const exitModal = document.getElementById('exitModal');
+const exitModalTitle = document.getElementById('exitModalTitle');
+const exitModalMessage = document.getElementById('exitModalMessage');
+const exitCancelBtn = document.getElementById('exitCancelBtn');
+const exitConfirmBtn = document.getElementById('exitConfirmBtn');
+const exitFeedback = document.getElementById('exitFeedback');
+
+function openExitModal() {
+    exitModal.classList.add('show');
+}
+
+function closeExitModal() {
+    exitModal.classList.remove('show');
+}
+
+function showFeedback(text) {
+    if (!exitFeedback) return;
+    exitFeedback.textContent = text;
+    exitFeedback.classList.add('show');
+}
+
+function finishExitFlow() {
+    exitModalTitle.textContent = '程序已退出';
+    exitModalMessage.textContent = '页面已结束显示，后端服务正在关闭。';
+    exitConfirmBtn.disabled = true;
+    exitCancelBtn.textContent = '关闭';
+}
+
+function shutdownPage() {
+    window.__pageClosing = true;
+    showFeedback('正在退出，请稍候…');
+
+    fetch('/sys/shutdown', { method: 'POST', keepalive: true })
+        .then(function() {
+            showFeedback('后端已停止，页面即将结束');
+        })
+        .catch(function() {
+            showFeedback('未检测到后端服务，已结束页面');
+        });
+
+    finishExitFlow();
+
+    setTimeout(function() {
+        try {
+            document.body.innerHTML = '<div class="exit-done">程序已退出</div>';
+        } catch (e) {}
+    }, 700);
+}
+
+function initExitFlow() {
+    console.log('[exit] initExitFlow running');
+
+    if (!closeBtn || !exitModal || !exitCancelBtn || !exitConfirmBtn) {
+        console.error('[exit] missing elements', {
+            closeBtn: !!closeBtn,
+            exitModal: !!exitModal,
+            exitCancelBtn: !!exitCancelBtn,
+            exitConfirmBtn: !!exitConfirmBtn
+        });
+        return;
+    }
+
+    closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeBtn.classList.add('btn-shutdown--active');
+        setTimeout(function() {
+            closeBtn.classList.remove('btn-shutdown--active');
+        }, 450);
+        openExitModal();
+    });
+
+    exitCancelBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (exitConfirmBtn.disabled) {
+            shutdownPage();
+            return;
+        }
+        closeExitModal();
+    });
+
+    exitConfirmBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('[exit] confirm clicked');
+        shutdownPage();
+    });
+
+    exitModal.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (e.target === exitModal) {
+            if (exitConfirmBtn.disabled) {
+                shutdownPage();
+            } else {
+                closeExitModal();
+            }
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && exitModal.classList.contains('show')) {
+            if (exitConfirmBtn.disabled) {
+                shutdownPage();
+            } else {
+                closeExitModal();
+            }
+        }
+    });
+}
+
+initExitFlow();
+
+// 退出期间阻止表单继续提交，避免 /censor 请求被浏览器取消并标红
+(function() {
+    var form = document.querySelector('form[method="post"]');
+    if (!form) return;
+    form.addEventListener('submit', function(e) {
+        if (window.__pageClosing) {
+            e.preventDefault();
+            showFeedback('页面正在退出，无法执行和谐操作');
+        }
+    });
+})();
+</script>
 </body>
 </html>
